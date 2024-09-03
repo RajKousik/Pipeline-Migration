@@ -1,0 +1,33 @@
+stages:
+  - install
+  - test
+  - deploy
+
+install_dependencies:
+  stage: install
+  image: node:18 # Use an official Node.js Docker image
+  script:
+    - cd backend
+    - npm install
+    - cd ../frontend
+    - npm install
+
+test_backend:
+  stage: test
+  image: node:18 # Use the same Node.js Docker image
+  script:
+    - cd backend
+    - npm test
+
+test_frontend:
+  stage: test
+  image: node:18 # Use the same Node.js Docker image
+  script:
+    - cd frontend
+    - npm test
+
+deploy:
+  stage: deploy
+  image: node:18 # Use the same Node.js Docker image
+  script:
+    - echo "Deployment step (can be configured to deploy to a server or platform etc)"
