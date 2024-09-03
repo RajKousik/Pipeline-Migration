@@ -1,0 +1,80 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow on push to the main branch
+  pull_request:
+    branches:
+      - main # Optionally, you can also trigger the workflow on pull requests to the main branch
+
+jobs:
+  install_dependencies:
+    runs-on: ubuntu-latest
+    name: Install Dependencies
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+  test_backend:
+    runs-on: ubuntu-latest
+    name: Test Backend
+    needs: install_dependencies
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Test backend
+        run: |
+          cd backend
+          npm test
+
+  test_frontend:
+    runs-on: ubuntu-latest
+    name: Test Frontend
+    needs: install_dependencies
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Test frontend
+        run: |
+          cd frontend
+          npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Application
+    needs: [test_backend, test_frontend]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Deploy Application
+        run: echo "Deployment step (can be configured to deploy to a server or platform etc)"
